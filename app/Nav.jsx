@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Ticket } from "lucide-react";
 
-export default function NavigationMenuDemo() {
+export default function Nav() {
   return (
     <nav className="p-4 flex flex-row border border-bottom bg-zinc-200 justify-between">
       <Link href={"/"} className="rounded-full p-2 text-neutral-100 bg-black">
