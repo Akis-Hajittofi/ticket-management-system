@@ -155,6 +155,11 @@ const tickets = [
 
 function Page() {
   const [ticketsState, setTicketsState] = useState(tickets);
+  const [filter, setFilter] = useState({
+    priority: "Low Medium High",
+    status: "Open In Progress Resolved",
+  });
+
   const form = useForm({
     defaultValues: {
       title: "",
@@ -171,25 +176,24 @@ function Page() {
     });
     setTicketsState([...ticketsState]);
   };
-  const handleDelete = (index) => {
-    ticketsState.splice(index, 1);
-    setTicketsState([...ticketsState]);
+  const handleDelete = (id) => {
+    setTicketsState(ticketsState.filter((ticket) => ticket.id !== id));
+  };
+
+  const handleFilter = (value, selectItem) => {
+    if (selectItem === "priority") {
+      setFilter({ ...filter, priority: value });
+    } else if (selectItem === "status") {
+      setFilter({ ...filter, status: value });
+    }
   };
 
   return (
-    <div className="flex -flex-row">
-      {/* btn here , this will add to the state */}
-      {/* controls here, this will update the state */}
-      {/* table below, will render table state  */}
-      <div className="p-8">
+    <div className="flex flex-row">
+      <div className="p-8 space-y-3">
         <Dialog>
           <DialogTrigger asChild>
-            <Button
-              className="h-16"
-              onClick={() => console.log("IT WAS CLICKED!!!")}
-            >
-              Create Ticket
-            </Button>
+            <Button className="h-16">Create Ticket</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -261,9 +265,45 @@ function Page() {
             </div>
           </DialogContent>
         </Dialog>
+
+        <div>
+          <Label>Priority</Label>
+          <Select onValueChange={(e) => handleFilter(e, "priority")}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="All" defaultValue="Low Medium High" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Low Medium High">All</SelectItem>
+              <SelectItem value="Low">Low</SelectItem>
+              <SelectItem value="Medium">Medium</SelectItem>
+              <SelectItem value="High">High</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <Label>Status</Label>
+          <Select onValueChange={(e) => handleFilter(e, "status")}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue
+                placeholder="All"
+                defaultValue="Open In progress Resolved"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Open In Progress Resolved">All</SelectItem>
+              <SelectItem value="Open">Open</SelectItem>
+              <SelectItem value="In Progress">In Progress</SelectItem>
+              <SelectItem value="Resolved">Resolved</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-      <div></div>
-      <Table tickets={ticketsState} handleDelete={handleDelete} />
+      <Table
+        tickets={ticketsState}
+        filter={filter}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 }
