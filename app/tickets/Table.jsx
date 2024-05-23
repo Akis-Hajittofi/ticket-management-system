@@ -16,8 +16,14 @@ import {
 } from "@/components/ui/tooltip";
 import { Trash2 } from "lucide-react";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 function Table({ tickets, filter, handleDelete }) {
+  const router = useRouter();
+
+  const openTicket = (id) => {
+    router.push(`/tickets/${id}`);
+  };
   return (
     <div>
       <TableUI>
@@ -40,7 +46,7 @@ function Table({ tickets, filter, handleDelete }) {
             .filter((ticket) => filter.priority.includes(ticket.priority))
             .filter((ticket) => filter.status.includes(ticket.status))
             .map((ticket, index) => (
-              <TableRow key={ticket.id}>
+              <TableRow key={ticket.id} onClick={() => openTicket(ticket.id)}>
                 <TableCell className="font-extrabold">{ticket.id}</TableCell>
                 <TableCell className="w-48">
                   <div className="flex flex-row items-center space-x-2">
@@ -101,12 +107,11 @@ function Table({ tickets, filter, handleDelete }) {
                   )}
                 </TableCell>
                 <TableCell>
-                  <div
+                  <Trash2
+                    size={17}
                     className="hover:cursor-pointer"
                     onClick={() => handleDelete(ticket.id)}
-                  >
-                    <Trash2 size={17} />
-                  </div>
+                  />
                 </TableCell>
               </TableRow>
             ))}

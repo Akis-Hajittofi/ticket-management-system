@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Table from "./Table";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -32,129 +32,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { currentDate } from "@/lib/utils";
+import { TicketContext } from "../ticket-provider";
 
-const tickets = [
-  {
-    id: 1,
-    requester: "Joey",
-    title: "Printer is jammed",
-    description:
-      "Every time I try and print, I get error messages saying that printer is jammed.",
-    date: "20/05/2024",
-    status: "Open",
-    priority: "Medium",
-    resolutionDate: "",
-    assignedAgent: "Admin",
-  },
-  {
-    id: 2,
-    requester: "Rachel",
-    title: "Cannot access email",
-    description:
-      "I am unable to access my email account. It keeps asking for a password reset.",
-    date: "18/05/2024",
-    status: "In Progress",
-    priority: "High",
-    resolutionDate: "",
-    assignedAgent: "Monica",
-  },
-  {
-    id: 3,
-    requester: "Chandler",
-    title: "Computer running slow",
-    description:
-      "My computer has been running extremely slow for the past week.",
-    date: "15/05/2024",
-    status: "Open",
-    priority: "Low",
-    resolutionDate: "",
-    assignedAgent: "Ross",
-  },
-  {
-    id: 4,
-    requester: "Monica",
-    title: "Software installation required",
-    description:
-      "I need the latest version of Photoshop installed on my workstation.",
-    date: "17/05/2024",
-    status: "Resolved",
-    priority: "Medium",
-    resolutionDate: "19/05/2024",
-    assignedAgent: "Chandler",
-  },
-  {
-    id: 5,
-    requester: "Phoebe",
-    title: "Unable to connect to VPN",
-    description: "I can't connect to the VPN when working from home.",
-    date: "19/05/2024",
-    status: "Open",
-    priority: "High",
-    resolutionDate: "",
-    assignedAgent: "Joey",
-  },
-  {
-    id: 6,
-    requester: "Ross",
-    title: "Forgotten password",
-    description: "I forgot the password to my computer. Need a reset.",
-    date: "20/05/2024",
-    status: "Resolved",
-    priority: "Low",
-    resolutionDate: "20/05/2024",
-    assignedAgent: "Phoebe",
-  },
-  {
-    id: 7,
-    requester: "Gunther",
-    title: "Coffee machine not working",
-    description:
-      "The coffee machine in the break room is not working. Displays an error code.",
-    date: "18/05/2024",
-    status: "Open",
-    priority: "Medium",
-    resolutionDate: "",
-    assignedAgent: "Rachel",
-  },
-  {
-    id: 8,
-    requester: "Janice",
-    title: "Phone line issues",
-    description:
-      "There's a lot of static on the office phone line. Hard to hear clients.",
-    date: "16/05/2024",
-    status: "In Progress",
-    priority: "High",
-    resolutionDate: "",
-    assignedAgent: "Chandler",
-  },
-  {
-    id: 9,
-    requester: "Mike",
-    title: "Projector bulb needs replacement",
-    description:
-      "The bulb in the conference room projector needs to be replaced.",
-    date: "15/05/2024",
-    status: "Resolved",
-    priority: "Low",
-    resolutionDate: "16/05/2024",
-    assignedAgent: "Monica",
-  },
-  {
-    id: 10,
-    requester: "Emily",
-    title: "Access to shared drive",
-    description: "I need access to the shared drive for the marketing team.",
-    date: "19/05/2024",
-    status: "Open",
-    priority: "Medium",
-    resolutionDate: "",
-    assignedAgent: "Ross",
-  },
-];
+
 
 function Page() {
-  const [ticketsState, setTicketsState] = useState(tickets);
+  const [ticketsState, setTicketsState] = useContext(TicketContext);
+  console.log(ticketsState);
   const [filter, setFilter] = useState({
     priority: "Low Medium High",
     status: "Open In Progress Resolved",
