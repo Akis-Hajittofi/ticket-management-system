@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import TicketProvider from "./ticket-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,26 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className + " flex flex-col"}>
-        <main>{children}</main>
+        <main>
+          <TicketProvider>{children}</TicketProvider>
+        </main>
       </body>
     </html>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
