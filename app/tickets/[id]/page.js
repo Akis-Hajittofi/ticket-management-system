@@ -23,6 +23,7 @@ import {
 import { Pencil } from "lucide-react";
 import Avatar from "@/components/Avatar";
 import Comment from "../Comment";
+import ComposeComment from "../ComposeComment";
 
 function Page({ params }) {
   const [ticketsState, setTicketsState] = useContext(TicketContext);
@@ -60,7 +61,6 @@ function Page({ params }) {
     ticket.assignedAgent = "Admin"; // Placeholder until login is implemented
     setTicketsState([...ticketsState]);
   };
-
 
   return (
     <div className="flex flex-row justify-center">
@@ -138,6 +138,7 @@ function Page({ params }) {
                 <Comment comment={comment} ticket={ticket} key={comment.id} />
               ))}
             </div>
+            <ComposeComment ticket={ticket} />
           </div>
 
           {/* RIGHT SIDE */}
@@ -192,6 +193,14 @@ function Page({ params }) {
                 <div className="flex flex-col space-y-2 p-2">
                   <Label>Assigned Agent</Label>
                   <span className="font-bold">{ticket.assignedAgent}</span>
+                </div>
+              </CardContent>
+              <CardContent>
+                <div className="flex flex-col space-y-2 p-2">
+                  <Label>Created On</Label>
+                  <span className="font-bold">
+                    {ticket.date} @ {ticket.time}
+                  </span>
                 </div>
               </CardContent>
               <CardContent>
