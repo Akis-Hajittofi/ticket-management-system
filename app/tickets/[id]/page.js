@@ -44,6 +44,24 @@ function Page({ params }) {
     setActiveTextareaId(null);
     setText(ticket.description);
   };
+
+  const updatePriority = (value) => {
+    ticket.priority = value;
+    setTicketsState([...ticketsState]);
+  };
+
+  const updateStatus = (value) => {
+    ticket.status = value;
+    setTicketsState([...ticketsState]);
+  };
+
+  const assignMe = (e) => {
+    e.preventDefault();
+    ticket.assignedAgent = "Admin"; // Placeholder until login is implemented
+    setTicketsState([...ticketsState]);
+  };
+
+
   return (
     <div className="flex flex-row justify-center">
       <div className="flex flex-col p-5 space-y-4 justify-center ">
@@ -124,18 +142,20 @@ function Page({ params }) {
 
           {/* RIGHT SIDE */}
           <div className="flex flex-col w-72 space-y-3">
-            <Button className="w-full">Assign Me</Button>
+            <Button className="w-full" onClick={(e) => assignMe(e)}>
+              Assign Me
+            </Button>
             <Card className="divide-y divide-solid">
               <CardContent>
                 <div className="space-y-2 p-2">
                   <div>
                     <Label>Priority</Label>
-                    <Select>
+                    <Select
+                      value={ticket.priority}
+                      onValueChange={(value) => updatePriority(value)}
+                    >
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder={ticket.priority}
-                          defaultValue={ticket.priority}
-                        />
+                        <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Low">Low</SelectItem>
@@ -150,7 +170,10 @@ function Page({ params }) {
               <CardContent>
                 <div className="space-y-2 p-2">
                   <Label>Status</Label>
-                  <Select>
+                  <Select
+                    value={ticket.status}
+                    onValueChange={(value) => updateStatus(value)}
+                  >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={ticket.status}

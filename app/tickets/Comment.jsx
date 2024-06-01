@@ -38,8 +38,16 @@ function Comment({ comment, ticket }) {
         </div>
 
         <div className="flex flex-row space-x-2">
-          <Pencil size={20} onClick={() => setIsEditing(true)} />
-          <Trash2 size={20} onClick={() => handleDelete(comment.id)} />
+          <Pencil
+            className="hover:cursor-pointer"
+            size={20}
+            onClick={() => setIsEditing(true)}
+          />
+          <Trash2
+            className="hover:cursor-pointer"
+            size={20}
+            onClick={() => handleDelete(comment.id)}
+          />
           <span className="font-thin">#{comment.id}</span>
         </div>
       </CardHeader>
