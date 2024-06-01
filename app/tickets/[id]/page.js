@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 import Avatar from "@/components/Avatar";
 import Comment from "../Comment";
 
@@ -40,12 +40,10 @@ function Page({ params }) {
   };
 
   const cancelEdit = (e) => {
-    console.log(e);
     e.preventDefault();
     setActiveTextareaId(null);
     setText(ticket.description);
   };
-
   return (
     <div className="flex flex-row justify-center">
       <div className="flex flex-col p-5 space-y-4 justify-center ">
@@ -84,7 +82,6 @@ function Page({ params }) {
                       <Textarea
                         className="text-base"
                         value={text}
-                        defaultValue={ticket.description}
                         disabled={activeTextareaId !== "description"}
                         id={"description"}
                         onChange={(e) => setText(e.target.value)}
@@ -119,8 +116,8 @@ function Page({ params }) {
             </p>
 
             <div className="space-y-5">
-              {ticket.comments?.map((comment, index) => (
-                <Comment comment={comment} key={index} />
+              {ticket.comments?.map((comment) => (
+                <Comment comment={comment} ticket={ticket} key={comment.id} />
               ))}
             </div>
           </div>
