@@ -1,7 +1,7 @@
 "use client";
 import { TicketContext } from "@/app/ticket-provider";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,19 +20,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 import Avatar from "@/components/Avatar";
-import { Separator } from "@/components/ui/separator";
+import Comment from "../Comment";
+import ComposeComment from "../ComposeComment";
 
 function Page({ params }) {
   const [ticketsState, setTicketsState] = useContext(TicketContext);
-
+  const [activeTextareaId, setActiveTextareaId] = useState(null);
   const [ticket] = ticketsState.filter((ticket) => ticket.id === +params.id);
-  console.log(ticket);
+  const [text, setText] = useState(ticket.description);
 
   if (!ticket) return <div>Not found</div>;
-  const deleteComment = (id) => {
-    ticket.comments = ticket.comments.filter((comment) => comment.id !== id);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    ticket.description = text;
+    setActiveTextareaId(null);
+    setTicketsState([...ticketsState]);
+  };
+
+  const cancelEdit = (e) => {
+    e.preventDefault();
+    setActiveTextareaId(null);
+    setText(ticket.description);
+  };
+
+  const updatePriority = (value) => {
+    ticket.priority = value;
+    setTicketsState([...ticketsState]);
+  };
+
+  const updateStatus = (value) => {
+    ticket.status = value;
+    setTicketsState([...ticketsState]);
+  };
+
+  const assignMe = (e) => {
+    e.preventDefault();
+    ticket.assignedAgent = "Admin"; // Placeholder until login is implemented
     setTicketsState([...ticketsState]);
   };
 
@@ -61,66 +87,76 @@ function Page({ params }) {
                   <span>{ticket.requester}</span>
                 </div>
 
-                <Pencil size={20} />
+                <Pencil
+                  size={20}
+                  onClick={() => setActiveTextareaId("description")}
+                  className="hover:cursor-pointer"
+                />
               </CardHeader>
               <CardContent>
                 <form>
                   <div className="grid w-full items-center gap-4">
-                    <div className="flex flex-col space-y-1.5">
-                      <Textarea value={ticket.description} />
+                    <div className="flex flex-col space-y-3">
+                      <Textarea
+                        className="text-base"
+                        value={text}
+                        disabled={activeTextareaId !== "description"}
+                        id={"description"}
+                        onChange={(e) => setText(e.target.value)}
+                      />
+                      <div
+                        className={`flex flex-row justify-end space-x-2 ${
+                          activeTextareaId !== "description" ? "hidden" : ""
+                        }`}
+                      >
+                        <Button
+                          className="h-fit"
+                          variant="outline"
+                          onClick={(e) => cancelEdit(e)}
+                        >
+                          Cancel
+                        </Button>{" "}
+                        <Button
+                          onClick={(e) => handleSubmit(e)}
+                          className="h-fit "
+                        >
+                          Save
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </form>
               </CardContent>
             </Card>
 
-            <p className="font-bold p-3">{ticket.comments.length} comments</p>
+            <p className="font-bold p-3">
+              {ticket.comments ? ticket.comments?.length : "0"} Comments
+            </p>
 
             <div className="space-y-5">
-              {ticket.comments.map((comment) => (
-                <Card className="w-[500px]" key={comment.id}>
-                  <CardHeader className="flex flex-row justify-between">
-                    <div className="flex flex-row items-center space-x-1">
-                      <Avatar />
-                      <span>{comment.author}</span>
-                    </div>
-
-                    <div className="flex flex-row space-x-2">
-                      <Pencil size={20} />
-                      <Trash2
-                        size={20}
-                        onClick={() => deleteComment(comment.id)}
-                      />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <form>
-                      <div className="grid w-full items-center gap-4">
-                        <div className="flex flex-col space-y-1.5">
-                          <Textarea value={comment.text} />
-                        </div>
-                      </div>
-                    </form>
-                  </CardContent>
-                </Card>
+              {ticket.comments?.map((comment) => (
+                <Comment comment={comment} ticket={ticket} key={comment.id} />
               ))}
             </div>
+            <ComposeComment ticket={ticket} />
           </div>
 
           {/* RIGHT SIDE */}
           <div className="flex flex-col w-72 space-y-3">
-            <Button className="w-full">Assign Me</Button>
+            <Button className="w-full" onClick={(e) => assignMe(e)}>
+              Assign Me
+            </Button>
             <Card className="divide-y divide-solid">
               <CardContent>
                 <div className="space-y-2 p-2">
                   <div>
                     <Label>Priority</Label>
-                    <Select>
+                    <Select
+                      value={ticket.priority}
+                      onValueChange={(value) => updatePriority(value)}
+                    >
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder={ticket.priority}
-                          defaultValue={ticket.priority}
-                        />
+                        <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Low">Low</SelectItem>
@@ -135,7 +171,10 @@ function Page({ params }) {
               <CardContent>
                 <div className="space-y-2 p-2">
                   <Label>Status</Label>
-                  <Select>
+                  <Select
+                    value={ticket.status}
+                    onValueChange={(value) => updateStatus(value)}
+                  >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={ticket.status}
@@ -154,6 +193,14 @@ function Page({ params }) {
                 <div className="flex flex-col space-y-2 p-2">
                   <Label>Assigned Agent</Label>
                   <span className="font-bold">{ticket.assignedAgent}</span>
+                </div>
+              </CardContent>
+              <CardContent>
+                <div className="flex flex-col space-y-2 p-2">
+                  <Label>Created On</Label>
+                  <span className="font-bold">
+                    {ticket.date} @ {ticket.time}
+                  </span>
                 </div>
               </CardContent>
               <CardContent>
