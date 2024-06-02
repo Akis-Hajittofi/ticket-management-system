@@ -32,7 +32,7 @@ function Comment({ comment, ticket }) {
   };
 
   return (
-    <Card className="w-[500px]">
+    <Card className="w-full md:w-[740px]">
       <CardHeader className="flex flex-row justify-between">
         <div className="flex flex-row items-baseline">
           <AvatarWithName username={comment.author} />
