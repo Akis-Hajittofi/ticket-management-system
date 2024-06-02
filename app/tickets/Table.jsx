@@ -63,7 +63,14 @@ function Table({ tickets, filter, handleDelete }) {
                           {ticket.description.substring(0, 60)}
                           {ticket.description.length > 60 && "..."}
                         </TooltipTrigger>
-                        <TooltipContent>{ticket.description}</TooltipContent>
+                        <TooltipContent
+                          className={`${
+                            ticket.description.length > 100 && "w-80"
+                          }`}
+                        >
+                          {ticket.description.substring(0, 500)}
+                          {ticket.description.length > 400 && "..."}
+                        </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                   </div>
@@ -110,7 +117,10 @@ function Table({ tickets, filter, handleDelete }) {
                   <Trash2
                     size={17}
                     className="hover:cursor-pointer"
-                    onClick={() => handleDelete(ticket.id)}
+                    onClick={(e) => {
+                      handleDelete(ticket.id);
+                      e.stopPropagation();
+                    }}
                   />
                 </TableCell>
               </TableRow>
