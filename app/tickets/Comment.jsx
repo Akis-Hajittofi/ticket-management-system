@@ -6,6 +6,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { TicketContext } from "../ticket-provider";
 import { currentDate, currentTime } from "@/lib/utils";
+import AvatarWithName from "./AvatarWithName";
 
 function Comment({ comment, ticket }) {
   const [ticketsState, setTicketsState] = useContext(TicketContext);
@@ -33,10 +34,9 @@ function Comment({ comment, ticket }) {
   return (
     <Card className="w-[500px]">
       <CardHeader className="flex flex-row justify-between">
-        <div className="flex flex-row items-baseline space-x-1">
-          <Avatar />
+        <div className="flex flex-row items-baseline">
+          <AvatarWithName username={comment.author} />
           <div className="flex flex-row items-baseline">
-            <span>{comment.author}</span>
             <span className="pl-2 font-thin text-sm italic">
               - {comment.date} @ {comment.time}
             </span>

@@ -17,6 +17,7 @@ import {
 import { Trash2 } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
+import AvatarWithName from "./AvatarWithName";
 
 function Table({ tickets, filter, handleDelete }) {
   const router = useRouter();
@@ -49,10 +50,7 @@ function Table({ tickets, filter, handleDelete }) {
               <TableRow key={ticket.id} onClick={() => openTicket(ticket.id)}>
                 <TableCell className="font-extrabold">{ticket.id}</TableCell>
                 <TableCell className="w-48">
-                  <div className="flex flex-row items-center space-x-2">
-                    <Avatar username={ticket.requester} />
-                    <span>{ticket.requester}</span>
-                  </div>
+                  <AvatarWithName username={ticket.requester} />
                 </TableCell>
                 <TableCell>{ticket.title}</TableCell>
                 <TableCell>

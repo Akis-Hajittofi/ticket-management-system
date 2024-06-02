@@ -3,15 +3,7 @@ import { TicketContext } from "@/app/ticket-provider";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -21,9 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Pencil } from "lucide-react";
-import Avatar from "@/components/Avatar";
 import Comment from "../Comment";
 import ComposeComment from "../ComposeComment";
+import AvatarWithName from "../AvatarWithName";
 
 function Page({ params }) {
   const [ticketsState, setTicketsState] = useContext(TicketContext);
@@ -82,10 +74,7 @@ function Page({ params }) {
           <div className="">
             <Card className="w-[500px] mb-12">
               <CardHeader className="flex flex-row justify-between">
-                <div className="flex flex-row items-center space-x-1">
-                  <Avatar />
-                  <span>{ticket.requester}</span>
-                </div>
+                <AvatarWithName username={ticket.requester} />
 
                 <Pencil
                   size={20}
