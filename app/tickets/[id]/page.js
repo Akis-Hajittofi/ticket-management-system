@@ -3,15 +3,7 @@ import { TicketContext } from "@/app/ticket-provider";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -21,9 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Pencil } from "lucide-react";
-import Avatar from "@/components/Avatar";
 import Comment from "../Comment";
 import ComposeComment from "../ComposeComment";
+import AvatarWithName from "../AvatarWithName";
 
 function Page({ params }) {
   const [ticketsState, setTicketsState] = useContext(TicketContext);
@@ -56,9 +48,8 @@ function Page({ params }) {
     setTicketsState([...ticketsState]);
   };
 
-  const assignMe = (e) => {
-    e.preventDefault();
-    ticket.assignedAgent = "Admin"; // Placeholder until login is implemented
+  const assignMe = (username) => {
+    ticket.assignedAgent = username; // Placeholder until login is implemented
     setTicketsState([...ticketsState]);
   };
 
@@ -82,10 +73,7 @@ function Page({ params }) {
           <div className="">
             <Card className="w-[500px] mb-12">
               <CardHeader className="flex flex-row justify-between">
-                <div className="flex flex-row items-center space-x-1">
-                  <Avatar />
-                  <span>{ticket.requester}</span>
-                </div>
+                <AvatarWithName username={ticket.requester} />
 
                 <Pencil
                   size={20}
@@ -143,9 +131,29 @@ function Page({ params }) {
 
           {/* RIGHT SIDE */}
           <div className="flex flex-col w-72 space-y-3">
-            <Button className="w-full" onClick={(e) => assignMe(e)}>
-              Assign Me
-            </Button>
+            {ticket.assignedAgent !== "Admin" ? (
+              <Button
+                className="w-full"
+                onClick={(e) => {
+                  e.preventDefault();
+                  assignMe("Admin");
+                }}
+              >
+                Assign Me
+              </Button>
+            ) : (
+              <Button
+                className="w-full"
+                variant="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  assignMe("");
+                }}
+              >
+                Unassign Me
+              </Button>
+            )}
+
             <Card className="divide-y divide-solid">
               <CardContent>
                 <div className="space-y-2 p-2">
