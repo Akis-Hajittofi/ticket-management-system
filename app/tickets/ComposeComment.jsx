@@ -34,7 +34,7 @@ function ComposeComment({ ticket }) {
   return (
     <div className="mt-5">
       <span className="font-bold pb-5">Add Comment:</span>
-      <Card className="w-[500px]">
+      <Card className="w-full md:w-[740px]">
         <CardHeader className="flex flex-row justify-between">
           <div className="flex flex-row items-center space-x-1">
             <Avatar />
