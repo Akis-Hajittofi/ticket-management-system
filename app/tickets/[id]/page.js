@@ -48,9 +48,8 @@ function Page({ params }) {
     setTicketsState([...ticketsState]);
   };
 
-  const assignMe = (e) => {
-    e.preventDefault();
-    ticket.assignedAgent = "Admin"; // Placeholder until login is implemented
+  const assignMe = (username) => {
+    ticket.assignedAgent = username; // Placeholder until login is implemented
     setTicketsState([...ticketsState]);
   };
 
@@ -132,9 +131,29 @@ function Page({ params }) {
 
           {/* RIGHT SIDE */}
           <div className="flex flex-col w-72 space-y-3">
-            <Button className="w-full" onClick={(e) => assignMe(e)}>
-              Assign Me
-            </Button>
+            {ticket.assignedAgent !== "Admin" ? (
+              <Button
+                className="w-full"
+                onClick={(e) => {
+                  e.preventDefault();
+                  assignMe("Admin");
+                }}
+              >
+                Assign Me
+              </Button>
+            ) : (
+              <Button
+                className="w-full"
+                variant="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  assignMe("");
+                }}
+              >
+                Unassign Me
+              </Button>
+            )}
+
             <Card className="divide-y divide-solid">
               <CardContent>
                 <div className="space-y-2 p-2">
